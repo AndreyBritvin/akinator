@@ -1,0 +1,6 @@
+[submodule "tree"]
+	path = tree
+	url = ../tree
+[submodule "My_logging_system"]
+	path = My_logging_system
+	url = ../My_logging_system/
