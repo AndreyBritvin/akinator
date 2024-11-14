@@ -1,8 +1,20 @@
 #include "akinator.h"
 #include "my_tree.h"
-#include "read_from_file.h"
+#include "my_log.h"
+#include <stdio.h>
 
 int main()
 {
-    return 0;
+    enable_logging("tree_dump/akinator.html");
+    char *buffer = 0;
+    fill_buffer(&buffer, "database/data.txt");
+    printf("%s\n", buffer);
+
+    my_tree_t akinator_tree = make_tree(buffer);
+
+    tree_dtor(&akinator_tree); // TODO: move to end_game()
+
+    disable_logging();
+
+    return OK;
 }
