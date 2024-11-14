@@ -135,7 +135,13 @@ err_code_t play_game(my_tree_t* tree)
 err_code_t give_definition(my_tree_t* tree, node_t* node_to_def)
 {
     assert(tree);
-    assert(node_to_def);
+
+    if (node_to_def == NULL)
+    {
+        printf("Unknown name...\n");
+
+        return OK;
+    }
 
     my_stack_t path = {};
     INIT_STACK(path);
@@ -222,8 +228,13 @@ err_code_t show_menu(my_tree_t* tree)
     while (answer != MODE_END)
     {
         printf("What would you want to do?:\n"
-               "%d - guess character, %d - overwrite base, %d - exit\n",
-                MODE_GAME, MODE_REWRITE, MODE_END);
+               "%d - guess character\n"
+               "%d - print all characters\n"
+               "%d - definition mode (using input, not finding mode)\n"
+               "%d - comparison mode\n"
+               "%d - overwrite base\n"
+               "%d - exit\n",
+                MODE_GAME, MODE_SHOW_ALL, MODE_DEFINITION, MODE_COMPARISON, MODE_REWRITE, MODE_END);
         scanf("%c", &answer);
         answer -= '0';
         free_input_buffer();
@@ -243,6 +254,18 @@ err_code_t show_menu(my_tree_t* tree)
         else if (answer == MODE_COMPARISON)
         {
             printf("This function still not ready :(\n");
+        }
+        else if (answer == MODE_DEFINITION)
+        {
+            printf("Write name of object to give definition:\n");
+            char* what_to_def = NULL;
+            get_line_from_stdin(&what_to_def);
+            give_definition(tree, find_node_by_text(tree, tree->root, what_to_def));
+            free(what_to_def);
+        }
+        else if (answer == MODE_SHOW_ALL)
+        {
+            print_all_text(tree, tree->root);
         }
         else
         {
@@ -309,6 +332,34 @@ err_code_t print_n_spaces(size_t num, FILE* where)
     {
         fprintf(where, " ");
     }
+
+    return OK;
+}
+
+node_t* find_node_by_text(my_tree_t* tree, node_t* node, char * str_to_find)
+{
+    node_t* node_to_return = NULL;
+
+    if (!strcmp(node->data, str_to_find))
+    {
+        TREE_DUMP(tree, node, "comparing this data with %s", str_to_find);
+        node_to_return = node;
+    }
+
+    if (node->left  != NULL && node_to_return == NULL)
+                               node_to_return = find_node_by_text(tree, node->left , str_to_find);
+    if (node->right != NULL && node_to_return == NULL)
+                               node_to_return = find_node_by_text(tree, node->right, str_to_find);
+
+    return node_to_return;
+}
+
+err_code_t print_all_text(my_tree_t* tree, node_t* node)
+{
+    if (node->left == NULL && node->right == NULL) printf(" - %s\n", node->data);
+
+    if (node->left  != NULL) print_all_text(tree, node->left);
+    if (node->right != NULL) print_all_text(tree, node->right);
 
     return OK;
 }
