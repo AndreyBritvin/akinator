@@ -258,7 +258,17 @@ err_code_t show_menu(my_tree_t* tree)
         }
         else if (answer == MODE_COMPARISON)
         {
-            printf("This function still not ready :(\n");
+            char* what_to_cmp_1 = NULL;
+            char* what_to_cmp_2 = NULL;
+
+            printf("Write name of object 1 to compare:\n");
+            get_line_from_stdin(&what_to_cmp_1);
+
+            printf("Write name of object 2 to compare:\n");
+            get_line_from_stdin(&what_to_cmp_2); // TODO: make free and move to func
+
+            compare_objects(tree, find_node_by_text(tree, tree->root, what_to_cmp_1),
+                                  find_node_by_text(tree, tree->root, what_to_cmp_2));
         }
         else if (answer == MODE_DEFINITION)
         {
@@ -379,6 +389,80 @@ err_code_t print_all_definitions(my_tree_t* tree, node_t* node)
 
     if (node->left  != NULL) print_all_definitions(tree, node->left);
     if (node->right != NULL) print_all_definitions(tree, node->right);
+
+    return OK;
+}
+
+err_code_t compare_objects(my_tree_t* tree, node_t* node_to_cmp_1, node_t* node_to_cmp_2)
+{
+    assert(tree);
+
+    if (node_to_cmp_1 == NULL)
+    {
+        printf("Unknown name for first name...\n");
+
+        return OK;
+    }
+    if (node_to_cmp_2 == NULL)
+    {
+        printf("Unknown name for second name...\n");
+
+        return OK;
+    }
+
+    node_t* pois_val = NULL;
+
+    my_stack_t path1 = {};
+    INIT_STACK(path1);
+    stack_ctor(&path1, 0, sizeof(node_t*), print_longs, &pois_val);
+
+    my_stack_t path2 = {};
+    INIT_STACK(path2);
+    stack_ctor(&path2, 0, sizeof(node_t*), print_longs, &pois_val);
+
+
+    generate_path(tree, node_to_cmp_1, &path1);
+    generate_path(tree, node_to_cmp_2, &path2);
+    print_comparison(node_to_cmp_1, node_to_cmp_2, &path1, &path2);
+
+    stack_dtor(&path1);
+    stack_dtor(&path2);
+
+    return OK;
+}
+
+err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, my_stack_t* path_2)
+{
+    printf("И %s, и %s -", node_1->data, node_2->data);
+    for (size_t i = path_1->size, j = path_2->size; i > 1 && j > 1; i--, j--)
+    {
+        node_t* node_cmp_1 = NULL;
+        node_t* node_cmp_2 = NULL;
+
+        stack_pop(path_1, &node_cmp_1);
+        stack_pop(path_2, &node_cmp_2);
+
+        if (node_cmp_1 == node_cmp_2)
+        {
+            printf(" %s", node_cmp_1->data);
+        }
+        else
+        {
+            printf(", но %s", node_1->data);
+            for (; i > 1; i--)
+            {
+                printf(" %s", node_cmp_1->data);
+                stack_pop(path_1, &node_cmp_1);
+            }
+            printf(", а %s", node_2->data);
+            for (; j > 1; j--)
+            {
+                printf(" %s", node_cmp_2->data);
+                stack_pop(path_2, &node_cmp_2);
+            } // TODO: make negative expressions
+        }
+    }
+    printf("\n");
 
     return OK;
 }

@@ -37,5 +37,7 @@ err_code_t print_n_spaces(size_t num, FILE* where);
 node_t* find_node_by_text(my_tree_t* tree, node_t* node, char * str_to_find);
 err_code_t print_all_text(my_tree_t* tree, node_t* node);
 err_code_t print_all_definitions(my_tree_t* tree, node_t* node);
+err_code_t compare_objects(my_tree_t* tree, node_t* node_to_cmp_1, node_t* node_to_cmp_2);
+err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, my_stack_t* path_2);
 
 #endif // AKINATOR_H_
