@@ -7,12 +7,13 @@
 
 enum game_mods
 {
-    MODE_GAME = 0,
-    MODE_SHOW_ALL,
-    MODE_DEFINITION,
-    MODE_COMPARISON,
-    MODE_REWRITE,
-    MODE_END,
+    MODE_GAME                       = 0,
+    MODE_SHOW_ALL_TEXT              = 1,
+    MODE_SHOW_ALL_DEFINITIONS       = 2,
+    MODE_DEFINITION                 = 3,
+    MODE_COMPARISON                 = 4,
+    MODE_REWRITE                    = 5,
+    MODE_END                        = 6,
 };
 
 const int MAX_STRING_SIZE = 128;
@@ -30,9 +31,11 @@ err_code_t print_path(node_t* node_to_def, my_stack_t* stack);
 err_code_t generate_path(my_tree_t* tree, node_t* node_to_def, my_stack_t *stack);
 err_code_t add_new_object(my_tree_t* tree, node_t* which_to_swap);
 err_code_t overwrite_file(my_tree_t* tree);
+err_code_t get_line_from_stdin(char ** what_to_change);
 err_code_t write_node(my_tree_t* tree, node_t* node, size_t recurs_level, FILE* overwrite_file);
 err_code_t print_n_spaces(size_t num, FILE* where);
 node_t* find_node_by_text(my_tree_t* tree, node_t* node, char * str_to_find);
 err_code_t print_all_text(my_tree_t* tree, node_t* node);
+err_code_t print_all_definitions(my_tree_t* tree, node_t* node);
 
 #endif // AKINATOR_H_

@@ -123,8 +123,11 @@ err_code_t play_game(my_tree_t* tree)
             printf("Input '%c' is not valid. Input Y/n\n", user_input);
         }
     }
-    give_definition(tree, last_node);
-    if (user_input == 'n')
+    if (user_input == 'y')
+    {
+        give_definition(tree, last_node);
+    }
+    else
     {
         add_new_object(tree, last_node);
     }
@@ -229,12 +232,14 @@ err_code_t show_menu(my_tree_t* tree)
     {
         printf("What would you want to do?:\n"
                "%d - guess character\n"
-               "%d - print all characters\n"
+               "%d - print all objects\n"
+               "%d - print all definitions\n"
                "%d - definition mode (using input, not finding mode)\n"
                "%d - comparison mode\n"
                "%d - overwrite base\n"
                "%d - exit\n",
-                MODE_GAME, MODE_SHOW_ALL, MODE_DEFINITION, MODE_COMPARISON, MODE_REWRITE, MODE_END);
+                MODE_GAME, MODE_SHOW_ALL_TEXT, MODE_SHOW_ALL_DEFINITIONS,
+                MODE_DEFINITION, MODE_COMPARISON, MODE_REWRITE, MODE_END);
         scanf("%c", &answer);
         answer -= '0';
         free_input_buffer();
@@ -263,9 +268,13 @@ err_code_t show_menu(my_tree_t* tree)
             give_definition(tree, find_node_by_text(tree, tree->root, what_to_def));
             free(what_to_def);
         }
-        else if (answer == MODE_SHOW_ALL)
+        else if (answer == MODE_SHOW_ALL_TEXT)
         {
             print_all_text(tree, tree->root);
+        }
+        else if (answer == MODE_SHOW_ALL_DEFINITIONS)
+        {
+            print_all_definitions(tree, tree->root);
         }
         else
         {
@@ -360,6 +369,16 @@ err_code_t print_all_text(my_tree_t* tree, node_t* node)
 
     if (node->left  != NULL) print_all_text(tree, node->left);
     if (node->right != NULL) print_all_text(tree, node->right);
+
+    return OK;
+}
+
+err_code_t print_all_definitions(my_tree_t* tree, node_t* node)
+{
+    if (node->left == NULL && node->right == NULL) give_definition(tree, node);
+
+    if (node->left  != NULL) print_all_definitions(tree, node->left);
+    if (node->right != NULL) print_all_definitions(tree, node->right);
 
     return OK;
 }

@@ -16,7 +16,7 @@
                                             return ERROR_CALLOC_IS_NULL;                        \
                                           }
 
-#define PRINT_ERROR(...) fprintf(stderr, __VA_ARGS__);
+// #define PRINT_ERROR(...) fprintf(stderr, __VA_ARGS__);
 
 #define LOG(...) if (LOG_FILE != NULL) fprintf(LOG_FILE, __VA_ARGS__)
 
