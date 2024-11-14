@@ -12,6 +12,8 @@ int main()
 
     my_tree_t akinator_tree = make_tree(buffer);
 
+    play_game(&akinator_tree);
+
     tree_dtor(&akinator_tree); // TODO: move to end_game()
 
     disable_logging();

@@ -51,7 +51,7 @@ my_tree_t make_tree(char *buffer)
 }
 
 node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* parent)
-{
+{// TODO refactor
     assert(buffer);
     assert(position);
 
@@ -92,7 +92,74 @@ node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* pare
     return node_to_return;
 }
 
-// func to parse buffer to tree (recursively)
+err_code_t play_game(my_tree_t* tree)
+{
+    char user_input = 0;
+
+    node_t* curr_node = tree->root;
+    do
+    {
+        while(curr_node != NULL)
+        {
+            printf("Ваш объект %s? Y/n\n", curr_node->data);
+            scanf("%c", &user_input);
+            free_input_buffer();
+            if (user_input == 'Y' || user_input == 'y')
+            {
+                curr_node = curr_node->right;
+            }
+            else if (user_input == 'n')
+            {
+                curr_node = curr_node->left;
+            }
+            else
+            {
+                printf("Input '%c' is not valid. Input Y/n\n", user_input);
+            }
+        }
+
+    }while (show_menu() == MODE_GAME);
+
+    return OK;
+}
+
+err_code_t show_menu()
+{
+    char answer = 0;
+    printf("Do you want to guess new game? Y/n\n");
+    scanf("%c", &answer);
+    if (answer == 'Y')
+    {
+        return MODE_GAME;
+    }
+    printf("Do you want to compare two objects? Y/n\n");
+    scanf("%c", &answer);
+    if (answer == 'Y')
+    {
+        return MODE_COMPARISON;
+    }
+    printf("Do you want to rewrite file? Y/n\n");
+    scanf("%c", &answer);
+    if (answer == 'Y')
+    {
+        return MODE_REWRITE;
+    }
+
+    return MODE_END;
+}
+
+err_code_t free_input_buffer()
+{
+    char garbage = 0;
+    while (scanf("%c", &garbage) != EOF && garbage != '\n')
+    {
+
+    }
+
+    return OK;
+}
+
+//+func to parse buffer to tree (recursively)
 // func to make game - yes/no
 // func to add new node
 // func to overwrite new game
