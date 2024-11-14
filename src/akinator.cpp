@@ -101,38 +101,33 @@ node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* pare
 
 err_code_t play_game(my_tree_t* tree)
 {
-    while (show_menu() == MODE_GAME)
+    node_t* curr_node = tree->root;
+    char user_input = 0;
+    node_t* last_node = curr_node;
+    while(curr_node != NULL)
     {
-        node_t* curr_node = tree->root;
-        char user_input = 0;
-        node_t* last_node = curr_node;
-        while(curr_node != NULL)
+        last_node = curr_node;
+        printf("Ваш объект %s? Y/n\n", curr_node->data);
+        scanf("%c", &user_input);
+        free_input_buffer();
+        if (user_input == 'Y' || user_input == 'y')
         {
-            last_node = curr_node;
-            printf("Ваш объект %s? Y/n\n", curr_node->data);
-            scanf("%c", &user_input);
-            free_input_buffer();
-            if (user_input == 'Y' || user_input == 'y')
-            {
-                curr_node = curr_node->right;
-            }
-            else if (user_input == 'n')
-            {
-                curr_node = curr_node->left;
-            }
-            else
-            {
-                printf("Input '%c' is not valid. Input Y/n\n", user_input);
-            }
+            curr_node = curr_node->right;
         }
-        give_definition(tree, last_node);
-        if (user_input == 'n')
+        else if (user_input == 'n')
         {
-            add_new_object(tree, last_node);
+            curr_node = curr_node->left;
+        }
+        else
+        {
+            printf("Input '%c' is not valid. Input Y/n\n", user_input);
         }
     }
-    printf("Overwriting file\n");
-    overwrite_file(tree);
+    give_definition(tree, last_node);
+    if (user_input == 'n')
+    {
+        add_new_object(tree, last_node);
+    }
 
     return OK;
 }
@@ -221,51 +216,62 @@ err_code_t add_new_object(my_tree_t* tree, node_t* which_to_swap)
     return OK;
 }
 
-err_code_t show_menu()
+err_code_t show_menu(my_tree_t* tree)
 {
     char answer = 0;
-    printf("Do you want to guess new game? Y/n\n");
-    scanf("%c", &answer);
-    free_input_buffer();
-    if (answer == 'Y')
+    while (answer != MODE_END)
     {
-        return MODE_GAME;
-    }
-    printf("Do you want to compare two objects? Y/n\n");
-    scanf("%c", &answer);
-    free_input_buffer();
-    if (answer == 'Y')
-    {
-        return MODE_COMPARISON;
-    }
-    printf("Do you want to rewrite file? Y/n\n");
-    scanf("%c", &answer);
-    free_input_buffer();
-    if (answer == 'Y')
-    {
-        return MODE_REWRITE;
+        printf("What would you want to do?:\n"
+               "%d - guess character, %d - overwrite base, %d - exit\n",
+                MODE_GAME, MODE_REWRITE, MODE_END);
+        scanf("%c", &answer);
+        answer -= '0';
+        free_input_buffer();
+        if (answer == MODE_GAME)
+        {
+            play_game(tree);
+        }
+        else if (answer == MODE_REWRITE)
+        {
+            overwrite_file(tree);
+        }
+        else if (answer == MODE_END)
+        {
+            printf("Thank you for game. See you later (^-^)\n");
+            break;
+        }
+        else if (answer == MODE_COMPARISON)
+        {
+            printf("This function still not ready :(\n");
+        }
+        else
+        {
+            printf("wrong input '%c'\n", answer);
+        }
     }
 
-    return MODE_END;
+    return OK;
 }
 
 err_code_t free_input_buffer()
 {
     char garbage = 0;
-    while (scanf("%c", &garbage) != EOF && garbage != '\n')
-    {
-
-    }
+    while (scanf("%c", &garbage) != EOF && garbage != '\n') {}
 
     return OK;
 }
 
 err_code_t overwrite_file(my_tree_t* tree)
 {
-    FILE * SAFE_OPEN_FILE(overwrite_file, "database/overwriten.txt", "w");
+    char * filename_to_overwrite = NULL;
+
+    printf("Write filename where to overwrite file, or use current path: <PATH>\n");
+    get_line_from_stdin(&filename_to_overwrite);
+    FILE * SAFE_OPEN_FILE(overwrite_file, filename_to_overwrite, "w");
 
     write_node(tree, tree->root, 0, overwrite_file);
 
+    free(filename_to_overwrite);
     fclose(overwrite_file);
 
     return OK;
@@ -310,7 +316,7 @@ err_code_t print_n_spaces(size_t num, FILE* where)
 //+func to parse buffer to tree (recursively)
 //+func to make game - yes/no
 //+func to add new node
-// func to overwrite new game
+//+func to overwrite new game
 //+func to make definitions (where store path? using parent field?)
 // func to make comparison
 

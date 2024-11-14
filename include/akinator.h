@@ -21,7 +21,7 @@ my_tree_t make_tree(char *buffer);
 node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* parent);
 size_t get_file_len(const char *filename);
 err_code_t play_game(my_tree_t* tree);
-err_code_t show_menu();
+err_code_t show_menu(my_tree_t* tree);
 err_code_t free_input_buffer();
 err_code_t add_new_object(my_tree_t* tree);
 err_code_t give_definition(my_tree_t* tree, node_t* node_to_def);

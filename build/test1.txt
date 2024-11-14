@@ -1,8 +1,5 @@
 {"live in universe"
-    {"has net"
-        {"doctor strange"}
-        {"Pavuk"}
-    }
+    {"doctor strange"}
     {"live in solar system"
         {"Orion cat"}
         {"live on earth"
