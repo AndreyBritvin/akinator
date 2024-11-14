@@ -30,11 +30,13 @@ err_code_t tree_dump(my_tree_t* tree, node_t* curr_node DEBUG_INFO, const char *
          tree->rootname, tree, tree->funcname, tree->filename, tree->codeline);
 #endif
     size_t tree_num = generate_dot_file(tree, curr_node, curr_action, args) - 1;
-    LOG("<img src=img/%zd.png>\n", tree_num);
+    LOG("<img src=img/%zu.png>\n", tree_num);
     LOG("End printing tree -----------------------------------------------------\n"
         "</pre>");
 
     va_end(args);
+
+    fflush(LOG_FILE);
 
     return OK;
 }
@@ -95,7 +97,7 @@ static err_code_t init_graph(FILE* dot_file)
 
 err_code_t generate_root_info(FILE* dot_file, my_tree_t* tree)
 {
-    DOT_("root[shape = Mrecord; label = \"{Tree at %p|Tree size = %zd|<r1> Root at %p}\" color = " ROOT_SHAPE_COLOR "]\n", tree, tree->size, tree->root);
+    DOT_("root[shape = Mrecord; label = \"{Tree at %p|Tree size = %zu|<r1> Root at %p}\" color = " ROOT_SHAPE_COLOR "]\n", tree, tree->size, tree->root);
     DOT_("root->tree%p [color = " ROOT_INFO_EDGE_COLOR "];\n", tree->root);
 
     return OK;

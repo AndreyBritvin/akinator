@@ -107,7 +107,7 @@ err_code_t print_node(node_t* tree)
 
     printf("(");
     if (tree->left  != NULL) print_node(tree->left);
-    printf("%d", tree->data);
+    printf("%s", tree->data);
     if (tree->right != NULL) print_node(tree->right);
     printf(")");
 
@@ -118,8 +118,8 @@ err_code_t verificator(my_tree_t* tree, node_t* node, size_t recurs_level)
 {
     assert(tree);
 
-    size_t index_to_append = 0;
-    printf("Tree size is %zd, curr recurs is %zd\n", tree->size, recurs_level);
+    // size_t index_to_append = 0;
+    // printf("Tree size is %zd, curr recurs is %zd\n", tree->size, recurs_level);
     if (recurs_level > tree->size)
     {
         return ERROR_TREE_LOOPED;

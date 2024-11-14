@@ -1,4 +1,21 @@
-{"animal"
-    {"poltorashka"}
-    {"ded"}
+{"live in universe"
+no  {"doctor strange"}
+yes {"live in solar system"
+        {"Orion cat"}
+        {"live on earth"
+            {"Marsianin"}
+            {"animal"
+                {"poltorashka"}
+                {"human"
+                    {"Ded"
+                        {"@Ded32"}
+                        {"You"
+                            {"me"}
+                            {"yeah its you"}
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

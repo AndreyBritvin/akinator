@@ -12,6 +12,8 @@
                         }
 #define SAFE_CALLOC(var_name, type, size) type *var_name = (type *) calloc(size, sizeof(type));
 
+#define PRINT_ERROR(...) fprintf(stderr, __VA_ARGS__);
+
 #define LOG(...) if (LOG_FILE != NULL) fprintf(LOG_FILE, __VA_ARGS__)
 
 // header utils

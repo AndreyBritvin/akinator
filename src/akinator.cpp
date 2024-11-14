@@ -5,14 +5,14 @@
 #include "my_tree.h"
 
 // func to read from file  to buffer
-__off_t get_file_len(const char *filename)
+size_t get_file_len(const char *filename)
 {
     assert(filename != NULL);
 
     struct stat st = {};
     stat(filename, &st);
 
-    return st.st_size;
+    return (size_t) st.st_size;
 }
 
 err_code_t fill_buffer(char **buffer_to_fill, const char* filename)
@@ -42,33 +42,51 @@ my_tree_t make_tree(char *buffer)
     INIT_TREE(tree_to_fill);
 
     free(tree_to_fill.root);
-    tree_to_fill.root = fill_node(buffer, 0, &tree_to_fill, NULL);
+
+    size_t position = 0;
+    tree_to_fill.root = fill_node(buffer, &position, &tree_to_fill, NULL);
     TREE_DUMP(&tree_to_fill, tree_to_fill.root, "I am gROOT");
 
     return tree_to_fill;
 }
 
-node_t* fill_node(char * buffer, size_t position, my_tree_t* tree, node_t* parent)
+node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* parent)
 {
     assert(buffer);
+    assert(position);
 
+    (*position)++;
     // char *expression = (char *) calloc(128, sizeof(char));
     SAFE_CALLOC(expression, char, MAX_STRING_SIZE);
 
-    sscanf(buffer + position, "\"%[^\"]\"", expression);
+    sscanf(buffer + *position, "\"%[^\"]\"", expression);
 
+    tree->size++;
     node_t* node_to_return = new_node(tree, expression, NULL, NULL);
     node_to_return->parent = parent;
-
-    size_t i = position;
-    while (buffer[i] != '}')
+    if (*position == 1)
     {
-        printf("Current char is %c position %zd\n", buffer[i], i);
-        if (buffer[i] == '{')
+        tree->root = node_to_return;
+    }
+
+    bool is_left = true;
+
+    while (buffer[*position] != '}')
+    {
+        // TREE_DUMP(tree, node_to_return, "Working with this\n Input text = %s", expression);
+        printf("Current char is %c position %zu\n", buffer[*position], *position);
+        if (buffer[*position] == '{' && is_left)
         {
-            node_to_return->right = fill_node(buffer, i + 1, tree, node_to_return);
+            is_left = false;
+            node_to_return->left = fill_node(buffer, position, tree, node_to_return);
         }
-        i++;
+
+        else if (buffer[*position] == '{' && !is_left)
+        {
+            node_to_return->right = fill_node(buffer, position, tree, node_to_return);
+        }
+
+        (*position)++;
     }
 
     return node_to_return;

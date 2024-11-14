@@ -1,0 +1,7 @@
+{"Animal"
+    {"Human"
+        {"NOT human??"}
+        {"Yes human"}
+    }
+    {"Poltorashka"}
+}
