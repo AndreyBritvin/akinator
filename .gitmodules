@@ -1,3 +1,6 @@
 [submodule "My_logging_system"]
 	path = My_logging_system
 	url = ../My_logging_system/
+[submodule "Stack"]
+	path = Stack
+	url = ../Stack

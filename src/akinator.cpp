@@ -3,6 +3,8 @@
 #include "utils.h"
 #include <stdio.h>
 #include "my_tree.h"
+#include "my_stack.h"
+#include <string.h>
 
 // func to read from file  to buffer
 size_t get_file_len(const char *filename)
@@ -57,7 +59,12 @@ node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* pare
 
     (*position)++;
     // char *expression = (char *) calloc(128, sizeof(char));
-    SAFE_CALLOC(expression, char, MAX_STRING_SIZE);
+    char* expression = (char *) calloc(MAX_STRING_SIZE, sizeof(char));
+    if (expression == NULL)
+    {
+        fprintf(stderr, "Ended memory in fill_node in calloc\n");
+        return NULL;
+    }
 
     sscanf(buffer + *position, "\"%[^\"]\"", expression);
 
@@ -94,13 +101,14 @@ node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* pare
 
 err_code_t play_game(my_tree_t* tree)
 {
-    char user_input = 0;
-
-    node_t* curr_node = tree->root;
-    do
+    while (show_menu() == MODE_GAME)
     {
+        node_t* curr_node = tree->root;
+        char user_input = 0;
+        node_t* last_node = curr_node;
         while(curr_node != NULL)
         {
+            last_node = curr_node;
             printf("Ваш объект %s? Y/n\n", curr_node->data);
             scanf("%c", &user_input);
             free_input_buffer();
@@ -117,8 +125,98 @@ err_code_t play_game(my_tree_t* tree)
                 printf("Input '%c' is not valid. Input Y/n\n", user_input);
             }
         }
+        give_definition(tree, last_node);
+        if (user_input == 'n')
+        {
+            add_new_object(tree, last_node);
+        }
+    }
+    printf("Overwriting file\n");
+    overwrite_file(tree);
 
-    }while (show_menu() == MODE_GAME);
+    return OK;
+}
+
+err_code_t give_definition(my_tree_t* tree, node_t* node_to_def)
+{
+    assert(tree);
+    assert(node_to_def);
+
+    my_stack_t path = {};
+    INIT_STACK(path);
+    node_t* pois_val = NULL;
+    stack_ctor(&path, 0, sizeof(node_t*), print_longs, &pois_val);
+
+    generate_path(tree, node_to_def, &path);
+    print_path(node_to_def, &path);
+
+    stack_dtor(&path);
+
+    return OK;
+}
+
+err_code_t print_path(node_t* node_to_def, my_stack_t* stack)
+{
+    printf("%s - ", node_to_def->data);
+    for (size_t i = stack->size; i > 1; i--)
+    {
+        node_t* def_node = NULL;
+        stack_pop(stack, &def_node);
+        printf("%s ", def_node->data);
+        fflush(stdout);
+    }
+    printf("\n");
+
+    return OK;
+}
+
+err_code_t generate_path(my_tree_t* tree, node_t* node_to_def, my_stack_t *stack)
+{
+    stack_push(stack, &node_to_def);
+
+    if (node_to_def == tree->root)
+    {
+        return OK;
+    }
+
+    generate_path(tree, node_to_def->parent, stack);
+
+    return OK;
+}
+
+err_code_t get_line_from_stdin(char ** what_to_change)
+{
+    SAFE_CALLOC(new_object, char, MAX_STRING_SIZE);
+    fgets(new_object, MAX_STRING_SIZE, stdin);
+    *strchr(new_object, '\n') = '\0';
+    *what_to_change = new_object;
+
+    return OK;
+}
+
+err_code_t add_new_object(my_tree_t* tree, node_t* which_to_swap)
+{
+    assert(tree);
+
+    printf("Какой объект вы загадали?\n");
+
+    char* new_object = NULL;
+    get_line_from_stdin(&new_object);
+
+    printf("Чем %s отличается от %s?\n", new_object, which_to_swap->data);
+
+    char* new_comparison = NULL;
+    get_line_from_stdin(&new_comparison);
+
+    node_t* no_node  = new_node(tree, which_to_swap->data, NULL, NULL);
+    node_t* yes_node = new_node(tree, new_object, NULL, NULL);
+
+    which_to_swap->data  = new_comparison;
+    which_to_swap->right = yes_node;
+    which_to_swap->left  = no_node;
+    yes_node->parent = no_node->parent = which_to_swap;
+
+    TREE_DUMP(tree, which_to_swap, "added to this node two daughters");
 
     return OK;
 }
@@ -128,18 +226,21 @@ err_code_t show_menu()
     char answer = 0;
     printf("Do you want to guess new game? Y/n\n");
     scanf("%c", &answer);
+    free_input_buffer();
     if (answer == 'Y')
     {
         return MODE_GAME;
     }
     printf("Do you want to compare two objects? Y/n\n");
     scanf("%c", &answer);
+    free_input_buffer();
     if (answer == 'Y')
     {
         return MODE_COMPARISON;
     }
     printf("Do you want to rewrite file? Y/n\n");
     scanf("%c", &answer);
+    free_input_buffer();
     if (answer == 'Y')
     {
         return MODE_REWRITE;
@@ -159,11 +260,58 @@ err_code_t free_input_buffer()
     return OK;
 }
 
+err_code_t overwrite_file(my_tree_t* tree)
+{
+    FILE * SAFE_OPEN_FILE(overwrite_file, "database/overwriten.txt", "w");
+
+    write_node(tree, tree->root, 0, overwrite_file);
+
+    fclose(overwrite_file);
+
+    return OK;
+}
+
+err_code_t write_node(my_tree_t* tree, node_t* node, size_t recurs_level, FILE* overwrite_file)
+{
+    print_n_spaces(recurs_level * 4, overwrite_file);
+    fprintf(overwrite_file, "{\"%s\"", node->data);
+    if (node->left != NULL)
+    {
+        fprintf(overwrite_file, "\n");
+        write_node(tree, node->left, recurs_level + 1, overwrite_file);
+    }
+    if (node->right != NULL)
+    {
+        write_node(tree, node->right, recurs_level + 1, overwrite_file);
+    }
+    if (node->right == NULL && node->left == NULL)
+    {
+        fprintf(overwrite_file, "}\n");
+    }
+    else
+    {
+        print_n_spaces(recurs_level * 4, overwrite_file);
+        fprintf(overwrite_file, "}\n");
+    }
+
+    return OK;
+}
+
+err_code_t print_n_spaces(size_t num, FILE* where)
+{
+    for (size_t i = 0; i < num; i++)
+    {
+        fprintf(where, " ");
+    }
+
+    return OK;
+}
+
 //+func to parse buffer to tree (recursively)
-// func to make game - yes/no
-// func to add new node
+//+func to make game - yes/no
+//+func to add new node
 // func to overwrite new game
-// func to make definitions (where store path? using parent field?)
+//+func to make definitions (where store path? using parent field?)
 // func to make comparison
 
 

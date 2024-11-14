@@ -1,0 +1,23 @@
+
+[----------------BEGIN STACK_DUMP----------------]
+Stack_t[0x7ffcafeb5000] "path" born at src/akinator.cpp:146 function:[give_definition()] called from src/my_stack.cpp:190 function:[stack_realloc()]
+Canary #1 = 7ffc7146eabe
+Stack capacity: 2
+Stack size    : 0
+
+CalcSt hash = b0e39f0daf621bdf
+Struct hash = b0e39f0daf621bdf
+
+Stack->data [0x603000000438]
+CalcBu hash = 202742eac2d903bb
+Buffer hash = 202742eac2d903bb
+
+data canary #1 = 6030deadbe86
+{
+    [i] = 0 elem =  0 (0)
+    [i] = 1 elem =  0 (0)
+}
+data canary #2 = 6030deadbe86
+Canary #2 = 7ffc7146eabe
+[-----------------END STACK_DUMP-----------------]
+

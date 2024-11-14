@@ -10,7 +10,11 @@
                             printf("Unable open output file '%s'\n", filename);    \
                             return ERROR_FILE;                                     \
                         }
-#define SAFE_CALLOC(var_name, type, size) type *var_name = (type *) calloc(size, sizeof(type));
+#define SAFE_CALLOC(var_name, type, size) type *var_name = (type *) calloc(size, sizeof(type)); \
+                                          if (var_name == NULL)                                 \
+                                          {                                                     \
+                                            return ERROR_CALLOC_IS_NULL;                        \
+                                          }
 
 #define PRINT_ERROR(...) fprintf(stderr, __VA_ARGS__);
 
