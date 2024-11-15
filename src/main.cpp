@@ -2,6 +2,7 @@
 #include "my_tree.h"
 #include "my_log.h"
 #include <stdio.h>
+#include <locale.h>
 
 int main(const int argc, const char** argv)
 {

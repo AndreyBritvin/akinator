@@ -1,29 +1,29 @@
-{"live in universe"
-    {"doctor strange"}
-    {"live in solar system"
-        {"live in marvel"
-            {"Orion cat"}
-            {"Pavuk"}
+{"живёт во вселенной"
+    {"доктор Стрэндж"}
+    {"живёт в солнечной системе"
+        {"живёт в вселенной Марвел"
+            {"Кошка с поясом Ориона"}
+            {"Павук"}
         }
-        {"live on earth"
-            {"Marsianin"}
-            {"animal"
-                {"human"
-                    {"Ded"
+        {"живёт на Земле"
+            {"Марсианин"}
+            {"животное"
+                {"человек"
+                    {"Дед"
                         {"@Ded32"}
-                        {"You"
-                            {"me"}
-                            {"yeah its you"}
+                        {"Ты"
+                            {"автор"}
+                            {"правда что ли ты"}
                         }
                     }
                 }
-                {"cat"
-                    {"doggy"
-                        {"horse"}
-                        {"bobik"}
+                {"кошка"
+                    {"собака"
+                        {"лошадь"}
+                        {"бобик"}
                     }
                     {"Canny cat"
-                        {"poltorashka"}
+                        {"полторашка"}
                         {"Canny cat this is canny cattt"}
                     }
                 }

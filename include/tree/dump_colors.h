@@ -13,4 +13,9 @@
 #define ROOT_INFO_EDGE_COLOR "brown"
 #define BACKGROUND_COLOR     "gray97"
 
+#define END_YES_COLOR "green3"
+#define END_NO_COLOR "coral1"
+#define TREE_YES_COLOR "lawngreen"
+#define TREE_NO_COLOR "lightpink"
+
 #endif // DUMP_COLORS_H_

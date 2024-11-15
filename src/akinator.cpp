@@ -47,13 +47,13 @@ my_tree_t make_tree(char *buffer)
 
     size_t position = 0;
     tree_to_fill.root = fill_node(buffer, &position, &tree_to_fill, NULL);
-    TREE_DUMP(&tree_to_fill, tree_to_fill.root, "I am gROOT");
+    TREE_DUMP(&tree_to_fill, tree_to_fill.root, "I am gROOT (generated this tree after reading file)");
 
     return tree_to_fill;
 }
 
 node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* parent)
-{// TODO refactor
+{// TODO some refactor
     assert(buffer);
     assert(position);
 
@@ -439,6 +439,9 @@ err_code_t compare_objects(my_tree_t* tree, node_t* node_to_cmp_1, node_t* node_
 
 err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, my_stack_t* path_2)
 {
+    assert(path_1);
+    assert(path_2);
+
     printf("И %s, и %s -", node_1->data, node_2->data);
     for (size_t i = path_1->size, j = path_2->size; i > 1 && j > 1; i--, j--)
     {
@@ -478,6 +481,8 @@ err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, 
 
 err_code_t insert_not(node_t* curr_node, my_stack_t* stack)
 {
+    assert(stack);
+
     if (curr_node->left == NULL && curr_node->right == NULL)
     {
         return ERROR_CANT_GET_NEXT_NODE;
@@ -488,7 +493,7 @@ err_code_t insert_not(node_t* curr_node, my_stack_t* stack)
 
     if (next_node->parent->left == next_node)
     {
-        printf(" not");
+        printf(" не");
     }
 
     return OK;
@@ -496,6 +501,9 @@ err_code_t insert_not(node_t* curr_node, my_stack_t* stack)
 
 err_code_t stack_look(my_stack_t* stack, void* where_to_look) // TODO: move to stack
 {
+    assert(stack);
+    assert(where_to_look);
+
     memcpy(where_to_look, (char *) stack->data + (stack->size - 1) * stack->elem_size, stack->elem_size);
 
     return OK;
