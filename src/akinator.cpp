@@ -226,7 +226,7 @@ err_code_t add_new_object(my_tree_t* tree, node_t* which_to_swap)
     return OK;
 }
 
-err_code_t show_menu(my_tree_t* tree)
+err_code_t show_menu(my_tree_t* tree, const char* curr_filename)
 {
     char answer = 0;
     while (answer != MODE_END)
@@ -250,7 +250,7 @@ err_code_t show_menu(my_tree_t* tree)
         }
         else if (answer == MODE_REWRITE)
         {
-            overwrite_file(tree);
+            overwrite_file(tree, curr_filename);
         }
         else if (answer == MODE_END)
         {
@@ -270,6 +270,9 @@ err_code_t show_menu(my_tree_t* tree)
 
             compare_objects(tree, find_node_by_text(tree, tree->root, what_to_cmp_1),
                                   find_node_by_text(tree, tree->root, what_to_cmp_2));
+
+            free(what_to_cmp_1);
+            free(what_to_cmp_2);
         }
         else if (answer == MODE_DEFINITION)
         {
@@ -304,11 +307,13 @@ err_code_t free_input_buffer()
     return OK;
 }
 
-err_code_t overwrite_file(my_tree_t* tree)
+err_code_t overwrite_file(my_tree_t* tree, const char* filename)
 {
+    assert(filename);
+
     char * filename_to_overwrite = NULL;
 
-    printf("Write filename where to overwrite file, or use current path: <PATH>\n");
+    printf("Write filename where to overwrite file, or use current path: <%s>\n", filename);
     get_line_from_stdin(&filename_to_overwrite);
     FILE * SAFE_OPEN_FILE(overwrite_file, filename_to_overwrite, "w");
 

@@ -1,7 +1,10 @@
 {"live in universe"
-no  {"doctor strange"}
-yes {"live in solar system"
-        {"Orion cat"}
+    {"doctor strange"}
+    {"live in solar system"
+        {"live in marvel"
+            {"Orion cat"}
+            {"Pavuk"}
+        }
         {"live on earth"
             {"Marsianin"}
             {"animal"
