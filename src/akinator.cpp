@@ -67,7 +67,10 @@ node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* pare
         return NULL;
     }
 
-    sscanf(buffer + *position, "\"%[^\"]\"", expression);
+    size_t len_of_expr = 0;
+    sscanf(buffer + *position, "\"%[^\"]\"%n", expression, &len_of_expr);
+
+    *position += len_of_expr;
 
     tree->size++;
     node_t* node_to_return = new_node(tree, expression, NULL, NULL);
@@ -82,7 +85,7 @@ node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* pare
     while (buffer[*position] != '}')
     {
         // TREE_DUMP(tree, node_to_return, "Working with this\n Input text = %s", expression);
-        printf("Current char is %c position %zu\n", buffer[*position], *position);
+        // printf("Current char is %c position %zu\n", buffer[*position], *position);
         if (buffer[*position] == '{' && is_left)
         {
             is_left = false;
@@ -155,20 +158,20 @@ err_code_t give_definition(my_tree_t* tree, node_t* node_to_def)
     stack_ctor(&path, 0, sizeof(node_t*), print_longs, &pois_val);
 
     generate_path(tree, node_to_def, &path);
-    print_path(node_to_def, &path);
+    printf("%s -", node_to_def->data);
+    print_path(node_to_def, &path, 0, path.size);
 
     stack_dtor(&path);
 
     return OK;
 }
 
-err_code_t print_path(node_t* node_to_def, my_stack_t* stack)
+err_code_t print_path(node_t* node_to_def, my_stack_t* stack, size_t from, size_t to)
 {
     assert(node_to_def);
     assert(stack);
 
-    printf("%s -", node_to_def->data);
-    for (size_t i = stack->size; i > 1; i--)
+    for (size_t i = to; i > from + 1; i--)
     {
         node_t* def_node = NULL;
         stack_pop(stack, &def_node);
@@ -311,6 +314,15 @@ err_code_t show_menu(my_tree_t* tree, const char* curr_filename)
             printf("wrong input '%c'\n", answer);
         }
     }
+
+    return OK;
+}
+
+err_code_t end_game(my_tree_t* tree)
+{
+    assert(tree);
+
+    tree_dtor(tree);
 
     return OK;
 }
@@ -478,37 +490,43 @@ err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, 
     assert(node_2);
 
     printf("И %s, и %s -", node_1->data, node_2->data);
+    size_t same_elements = 0;
     for (size_t i = path_1->size, j = path_2->size; i > 1 && j > 1; i--, j--)
     {
         node_t* node_cmp_1 = NULL;
         node_t* node_cmp_2 = NULL;
 
-        stack_pop(path_1, &node_cmp_1);
-        stack_pop(path_2, &node_cmp_2);
+        stack_look_at(path_1, &node_cmp_1, i);
+        stack_look_at(path_2, &node_cmp_2, j);
 
-        if (node_cmp_1 == node_cmp_2)
+        if (node_cmp_1 != node_cmp_2)
         {
-            insert_not(node_cmp_1, path_1);
-            printf(" %s", node_cmp_1->data);
+            same_elements = i;
+            break;
         }
-        else
-        {
-            printf(", но %s", node_1->data);
-            for (; i > 1; i--)
-            {
-                insert_not(node_cmp_1, path_1);
-                printf(" %s", node_cmp_1->data);
-                stack_pop(path_1, &node_cmp_1);
-            }
-            printf(", а %s", node_2->data);
-            for (; j > 1; j--)
-            {
-                insert_not(node_cmp_2, path_2);
-                printf(" %s", node_cmp_2->data);
-                stack_pop(path_2, &node_cmp_2);
-            }
-        }
+            // {
+            //     insert_not(node_cmp_1, path_1);
+            //     printf(" %s", node_cmp_1->data);
+            //     stack_pop(path_1, &node_cmp_1);
+            // }
+            // for (; j > 1; j--)
+            // {
+            //     insert_not(node_cmp_2, path_2);
+            //     printf(" %s", node_cmp_2->data);
+            //     stack_pop(path_2, &node_cmp_2);
+            // }
+        // }
+
+
     }
+    print_path(node_1, path_1, 0, same_elements - 1);
+
+    printf(", но %s", node_1->data);
+    print_path(node_1, path_1, same_elements - 1, path_1->size);
+
+    printf(", а %s", node_2->data);
+    print_path(node_2, path_2, same_elements - 1, path_2->size);
+
     printf("\n");
 
     return OK;
@@ -541,6 +559,16 @@ err_code_t stack_look(my_stack_t* stack, void* where_to_look) // TODO: move to s
     assert(where_to_look);
 
     memcpy(where_to_look, (char *) stack->data + (stack->size - 1) * stack->elem_size, stack->elem_size);
+
+    return OK;
+}
+
+err_code_t stack_look_at(my_stack_t* stack, void* where_to_look, size_t index) // TODO: move to stack
+{
+    assert(stack);
+    assert(where_to_look);
+
+    memcpy(where_to_look, (char *) stack->data + index * stack->elem_size, stack->elem_size);
 
     return OK;
 }

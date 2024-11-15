@@ -36,7 +36,7 @@ err_code_t add_new_object(my_tree_t* tree);
 
 err_code_t give_definition(my_tree_t* tree, node_t* node_to_def);
 
-err_code_t print_path(node_t* node_to_def, my_stack_t* stack);
+err_code_t print_path(node_t* node_to_def, my_stack_t* stack, size_t from, size_t to);
 
 err_code_t generate_path(my_tree_t* tree, node_t* node_to_def, my_stack_t *stack);
 
@@ -62,6 +62,10 @@ err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, 
 
 err_code_t stack_look(my_stack_t* stack, void* where_to_look); // TODO: move to stack
 
+err_code_t stack_look_at(my_stack_t* stack, void* where_to_look, size_t index); // TODO: move to stack
+
 err_code_t insert_not(node_t* curr_node, my_stack_t* stack);
+
+err_code_t end_game(my_tree_t* tree);
 
 #endif // AKINATOR_H_

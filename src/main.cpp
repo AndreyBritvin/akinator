@@ -15,13 +15,13 @@ int main(const int argc, const char** argv)
     enable_logging("tree_dump/akinator.html");
     char *buffer = 0;
     fill_buffer(&buffer, argv[1]);
-    printf("%s\n", buffer);
+    // printf("%s\n", buffer);
 
     my_tree_t akinator_tree = make_tree(buffer);
 
     show_menu(&akinator_tree, argv[1]);
 
-    tree_dtor(&akinator_tree); // TODO: move to end_game()
+    end_game(&akinator_tree);
 
     disable_logging();
 
