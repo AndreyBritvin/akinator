@@ -39,5 +39,7 @@ err_code_t print_all_text(my_tree_t* tree, node_t* node);
 err_code_t print_all_definitions(my_tree_t* tree, node_t* node);
 err_code_t compare_objects(my_tree_t* tree, node_t* node_to_cmp_1, node_t* node_to_cmp_2);
 err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, my_stack_t* path_2);
+err_code_t stack_look(my_stack_t* stack, void* where_to_look); // TODO: move to stack
+err_code_t insert_not(node_t* curr_node, my_stack_t* stack);
 
 #endif // AKINATOR_H_

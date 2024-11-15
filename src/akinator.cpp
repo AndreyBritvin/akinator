@@ -161,12 +161,13 @@ err_code_t give_definition(my_tree_t* tree, node_t* node_to_def)
 
 err_code_t print_path(node_t* node_to_def, my_stack_t* stack)
 {
-    printf("%s - ", node_to_def->data);
+    printf("%s -", node_to_def->data);
     for (size_t i = stack->size; i > 1; i--)
     {
         node_t* def_node = NULL;
         stack_pop(stack, &def_node);
-        printf("%s ", def_node->data);
+        insert_not(def_node, stack);
+        printf(" %s", def_node->data);
         fflush(stdout);
     }
     printf("\n");
@@ -265,7 +266,7 @@ err_code_t show_menu(my_tree_t* tree)
             get_line_from_stdin(&what_to_cmp_1);
 
             printf("Write name of object 2 to compare:\n");
-            get_line_from_stdin(&what_to_cmp_2); // TODO: make free and move to func
+            get_line_from_stdin(&what_to_cmp_2);
 
             compare_objects(tree, find_node_by_text(tree, tree->root, what_to_cmp_1),
                                   find_node_by_text(tree, tree->root, what_to_cmp_2));
@@ -444,6 +445,7 @@ err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, 
 
         if (node_cmp_1 == node_cmp_2)
         {
+            insert_not(node_cmp_1, path_1);
             printf(" %s", node_cmp_1->data);
         }
         else
@@ -451,12 +453,14 @@ err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, 
             printf(", но %s", node_1->data);
             for (; i > 1; i--)
             {
+                insert_not(node_cmp_1, path_1);
                 printf(" %s", node_cmp_1->data);
                 stack_pop(path_1, &node_cmp_1);
             }
             printf(", а %s", node_2->data);
             for (; j > 1; j--)
             {
+                insert_not(node_cmp_2, path_2);
                 printf(" %s", node_cmp_2->data);
                 stack_pop(path_2, &node_cmp_2);
             } // TODO: make negative expressions
@@ -467,11 +471,36 @@ err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, 
     return OK;
 }
 
+err_code_t insert_not(node_t* curr_node, my_stack_t* stack)
+{
+    if (curr_node->left == NULL && curr_node->right == NULL)
+    {
+        return ERROR_CANT_GET_NEXT_NODE;
+    }
+
+    node_t* next_node = NULL;
+    stack_look(stack, &next_node);
+
+    if (next_node->parent->left == next_node)
+    {
+        printf(" not");
+    }
+
+    return OK;
+}
+
+err_code_t stack_look(my_stack_t* stack, void* where_to_look) // TODO: move to stack
+{
+    memcpy(where_to_look, (char *) stack->data + (stack->size - 1) * stack->elem_size, stack->elem_size);
+
+    return OK;
+}
+
 //+func to parse buffer to tree (recursively)
 //+func to make game - yes/no
 //+func to add new node
 //+func to overwrite new game
 //+func to make definitions (where store path? using parent field?)
-// func to make comparison
+//+func to make comparison
 
 
