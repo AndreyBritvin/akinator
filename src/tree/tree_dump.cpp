@@ -23,9 +23,9 @@ err_code_t tree_dump(my_tree_t* tree, node_t* curr_node DEBUG_INFO, const char *
     va_list args;
     va_start(args, curr_action);
     static size_t dump_num = 0;
-    LOG("<h2>"
+    LOG("<center><h2>"
         "Dump №%zu"
-        "", dump_num);
+        "</h2></center>", dump_num);
     LOG("<pre>\n"
         "Tree dump called from %s() in %s:%d for tree %p\n\n",
                         funcname, filename, fileline, tree);
@@ -36,7 +36,7 @@ err_code_t tree_dump(my_tree_t* tree, node_t* curr_node DEBUG_INFO, const char *
     size_t tree_num = generate_dot_file(tree, curr_node, curr_action, args) - 1;
     LOG("<img src=img/%zu.png>\n", tree_num);
     LOG("End printing tree -----------------------------------------------------\n"
-        "</h2></pre>");
+        "</pre>");
 
     va_end(args);
     dump_num++;

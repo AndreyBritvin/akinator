@@ -1,15 +1,16 @@
 #include "akinator.h"
 #include "my_tree.h"
 #include "my_log.h"
+#include "utils.h"
 #include <stdio.h>
 #include <locale.h>
 
 int main(const int argc, const char** argv)
 {
-    if (argc == 1)
+    if (argc != 2)
     {
         printf("Please enter <%s path_to_database> to start game\n", argv[0]);
-        return OK;
+        return ERROR_FILENAME_IS_EMPTY;
     }
     enable_logging("tree_dump/akinator.html");
     char *buffer = 0;

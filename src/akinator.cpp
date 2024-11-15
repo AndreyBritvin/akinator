@@ -56,6 +56,7 @@ node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* pare
 {// TODO some refactor
     assert(buffer);
     assert(position);
+    assert(tree);
 
     (*position)++;
     // char *expression = (char *) calloc(128, sizeof(char));
@@ -101,6 +102,8 @@ node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* pare
 
 err_code_t play_game(my_tree_t* tree)
 {
+    assert(tree);
+
     node_t* curr_node = tree->root;
     char user_input = 0;
     node_t* last_node = curr_node;
@@ -161,6 +164,9 @@ err_code_t give_definition(my_tree_t* tree, node_t* node_to_def)
 
 err_code_t print_path(node_t* node_to_def, my_stack_t* stack)
 {
+    assert(node_to_def);
+    assert(stack);
+
     printf("%s -", node_to_def->data);
     for (size_t i = stack->size; i > 1; i--)
     {
@@ -177,6 +183,10 @@ err_code_t print_path(node_t* node_to_def, my_stack_t* stack)
 
 err_code_t generate_path(my_tree_t* tree, node_t* node_to_def, my_stack_t *stack)
 {
+    assert(tree);
+    assert(node_to_def);
+    assert(stack);
+
     stack_push(stack, &node_to_def);
 
     if (node_to_def == tree->root)
@@ -191,6 +201,8 @@ err_code_t generate_path(my_tree_t* tree, node_t* node_to_def, my_stack_t *stack
 
 err_code_t get_line_from_stdin(char ** what_to_change)
 {
+    assert(what_to_change);
+
     SAFE_CALLOC(new_object, char, MAX_STRING_SIZE);
     fgets(new_object, MAX_STRING_SIZE, stdin);
     *strchr(new_object, '\n') = '\0';
@@ -202,6 +214,7 @@ err_code_t get_line_from_stdin(char ** what_to_change)
 err_code_t add_new_object(my_tree_t* tree, node_t* which_to_swap)
 {
     assert(tree);
+    assert(which_to_swap);
 
     printf("Какой объект вы загадали?\n");
 
@@ -228,6 +241,9 @@ err_code_t add_new_object(my_tree_t* tree, node_t* which_to_swap)
 
 err_code_t show_menu(my_tree_t* tree, const char* curr_filename)
 {
+    assert(tree);
+    assert(curr_filename);
+
     char answer = 0;
     while (answer != MODE_END)
     {
@@ -309,6 +325,7 @@ err_code_t free_input_buffer()
 
 err_code_t overwrite_file(my_tree_t* tree, const char* filename)
 {
+    assert(tree);
     assert(filename);
 
     char * filename_to_overwrite = NULL;
@@ -327,6 +344,10 @@ err_code_t overwrite_file(my_tree_t* tree, const char* filename)
 
 err_code_t write_node(my_tree_t* tree, node_t* node, size_t recurs_level, FILE* overwrite_file)
 {
+    assert(tree);
+    assert(node);
+    assert(overwrite_file);
+
     print_n_spaces(recurs_level * 4, overwrite_file);
     fprintf(overwrite_file, "{\"%s\"", node->data);
     if (node->left != NULL)
@@ -353,6 +374,8 @@ err_code_t write_node(my_tree_t* tree, node_t* node, size_t recurs_level, FILE* 
 
 err_code_t print_n_spaces(size_t num, FILE* where)
 {
+    assert(where);
+
     for (size_t i = 0; i < num; i++)
     {
         fprintf(where, " ");
@@ -363,6 +386,10 @@ err_code_t print_n_spaces(size_t num, FILE* where)
 
 node_t* find_node_by_text(my_tree_t* tree, node_t* node, char * str_to_find)
 {
+    assert(tree);
+    assert(node);
+    assert(str_to_find);
+
     node_t* node_to_return = NULL;
 
     if (!strcmp(node->data, str_to_find))
@@ -381,6 +408,9 @@ node_t* find_node_by_text(my_tree_t* tree, node_t* node, char * str_to_find)
 
 err_code_t print_all_text(my_tree_t* tree, node_t* node)
 {
+    assert(tree);
+    assert(node);
+
     if (node->left == NULL && node->right == NULL) printf(" - %s\n", node->data);
 
     if (node->left  != NULL) print_all_text(tree, node->left);
@@ -391,6 +421,9 @@ err_code_t print_all_text(my_tree_t* tree, node_t* node)
 
 err_code_t print_all_definitions(my_tree_t* tree, node_t* node)
 {
+    assert(tree);
+    assert(node);
+
     if (node->left == NULL && node->right == NULL) give_definition(tree, node);
 
     if (node->left  != NULL) print_all_definitions(tree, node->left);
@@ -441,6 +474,8 @@ err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, 
 {
     assert(path_1);
     assert(path_2);
+    assert(node_1);
+    assert(node_2);
 
     printf("И %s, и %s -", node_1->data, node_2->data);
     for (size_t i = path_1->size, j = path_2->size; i > 1 && j > 1; i--, j--)
@@ -471,7 +506,7 @@ err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, 
                 insert_not(node_cmp_2, path_2);
                 printf(" %s", node_cmp_2->data);
                 stack_pop(path_2, &node_cmp_2);
-            } // TODO: make negative expressions
+            }
         }
     }
     printf("\n");
@@ -482,6 +517,7 @@ err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, 
 err_code_t insert_not(node_t* curr_node, my_stack_t* stack)
 {
     assert(stack);
+    assert(curr_node);
 
     if (curr_node->left == NULL && curr_node->right == NULL)
     {
