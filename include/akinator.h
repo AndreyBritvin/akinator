@@ -19,27 +19,49 @@ enum game_mods
 const int MAX_STRING_SIZE = 128;
 
 err_code_t fill_buffer(char **buffer_to_fill, const char* filename);
+
 my_tree_t make_tree(char *buffer);
+
 node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* parent);
+
 size_t get_file_len(const char *filename);
+
 err_code_t play_game(my_tree_t* tree);
+
 err_code_t show_menu(my_tree_t* tree, const char* curr_filename);
+
 err_code_t free_input_buffer();
+
 err_code_t add_new_object(my_tree_t* tree);
+
 err_code_t give_definition(my_tree_t* tree, node_t* node_to_def);
+
 err_code_t print_path(node_t* node_to_def, my_stack_t* stack);
+
 err_code_t generate_path(my_tree_t* tree, node_t* node_to_def, my_stack_t *stack);
+
 err_code_t add_new_object(my_tree_t* tree, node_t* which_to_swap);
+
 err_code_t overwrite_file(my_tree_t* tree, const char* filename);
+
 err_code_t get_line_from_stdin(char ** what_to_change);
+
 err_code_t write_node(my_tree_t* tree, node_t* node, size_t recurs_level, FILE* overwrite_file);
+
 err_code_t print_n_spaces(size_t num, FILE* where);
+
 node_t* find_node_by_text(my_tree_t* tree, node_t* node, char * str_to_find);
+
 err_code_t print_all_text(my_tree_t* tree, node_t* node);
+
 err_code_t print_all_definitions(my_tree_t* tree, node_t* node);
+
 err_code_t compare_objects(my_tree_t* tree, node_t* node_to_cmp_1, node_t* node_to_cmp_2);
+
 err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, my_stack_t* path_2);
+
 err_code_t stack_look(my_stack_t* stack, void* where_to_look); // TODO: move to stack
+
 err_code_t insert_not(node_t* curr_node, my_stack_t* stack);
 
 #endif // AKINATOR_H_
