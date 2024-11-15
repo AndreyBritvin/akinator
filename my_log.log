@@ -1,0 +1,165 @@
+Hash struct val = 46687ae1cf169895
+Hash buffer val = 9ace4aed7ef39dd3
+Hash struct val = 4b1c59450e08f16d
+Hash buffer val = 1bdc274e70144593
+Entered stack_push
+Increasing memory!!!
+Finished checking
+Quit stack_push
+Entered stack_push
+Finished checking
+Quit stack_push
+Entered stack_push
+Increasing memory!!!
+Finished checking
+Quit stack_push
+Entered stack_push
+Finished checking
+Quit stack_push
+Entered stack_push
+Increasing memory!!!
+Finished checking
+Quit stack_push
+Entered stack_push
+Finished checking
+Quit stack_push
+Entered stack_push
+Increasing memory!!!
+Finished checking
+Quit stack_push
+Entered stack_push
+Finished checking
+Quit stack_push
+Entered stack_push
+Increasing memory!!!
+Finished checking
+Quit stack_push
+Entered stack_push
+Finished checking
+Quit stack_push
+Entered stack_push
+Finished checking
+Quit stack_push
+Entered stack_pop
+Quit stack_pop
+Entered stack_pop
+Quit stack_pop
+Entered stack_pop
+Decreasing memory :( ):
+Quit stack_pop
+Entered stack_pop
+Quit stack_pop
+Entered stack_pop
+Quit stack_pop
+Entered stack_pop
+Quit stack_pop
+40deadba66
+{
+   *[i] = 0 elem =  105759274697056 (603000000160)
+   *[i] = 1 elem =  105759274696960 (603000000100)
+    [i] = 2 elem =  0 (0)
+    [i] = 3 elem =  0 (0)
+}
+data canary #2 = 6040deadba66
+Canary #2 = 7fff921348ae
+[-----------------END STACK_DUMP-----------------]
+
+
+[----------------BEGIN STACK_DUMP----------------]
+Stack_t[0x7fff4cbef2a0] "path2" born at src/akinator.cpp:471 function:[compare_objects()] called from src/my_stack.cpp:190 function:[stack_realloc()]
+Canary #1 = 7fff9213481e
+Stack capacity: 2
+Stack size    : 0
+
+CalcSt hash = 40daa463046df012
+Struct hash = 40daa463046df012
+
+Stack->data [0x6030000004c8]
+CalcBu hash = 48a64a47496bf99b
+Buffer hash = 48a64a47496bf99b
+
+data canary #1 = 6030deadbe76
+{
+    [i] = 0 elem =  0 (0)
+    [i] = 1 elem =  0 (0)
+}
+data canary #2 = 6030deadbe76
+Canary #2 = 7fff9213481e
+[-----------------END STACK_DUMP-----------------]
+
+
+[----------------BEGIN STACK_DUMP----------------]
+Stack_t[0x7fff4cbef2a0] "path2" born at src/akinator.cpp:471 function:[compare_objects()] called from src/my_stack.cpp:190 function:[stack_realloc()]
+Canary #1 = 7fff9213481e
+Stack capacity: 4
+Stack size    : 2
+
+CalcSt hash = 975456beaf17a5f3
+Struct hash = 975456beaf17a5f3
+
+Stack->data [0x604000000118]
+CalcBu hash = abf8b50df88895ed
+Buffer hash = abf8b50df88895ed
+
+data canary #1 = 6040deadbba6
+{
+   *[i] = 0 elem =  105759274697776 (603000000430)
+   *[i] = 1 elem =  105759274697728 (603000000400)
+    [i] = 2 elem =  0 (0)
+    [i] = 3 elem =  0 (0)
+}
+data canary #2 = 6040deadbba6
+Canary #2 = 7fff9213481e
+[-----------------END STACK_DUMP-----------------]
+
+
+[----------------BEGIN STACK_DUMP----------------]
+Stack_t[0x7fff4cbef2a0] "path2" born at src/akinator.cpp:471 function:[compare_objects()] called from src/my_stack.cpp:190 function:[stack_realloc()]
+Canary #1 = 7fff9213481e
+Stack capacity: 8
+Stack size    : 4
+
+CalcSt hash = e7ac71d63eff76cc
+Struct hash = e7ac71d63eff76cc
+
+Stack->data [0x607000000258]
+CalcBu hash = 1f38ddb082e8409b
+Buffer hash = 1f38ddb082e8409b
+
+data canary #1 = 6070deadb8e6
+{
+   *[i] = 0 elem =  105759274697776 (603000000430)
+   *[i] = 1 elem =  105759274697728 (603000000400)
+   *[i] = 2 elem =  105759274697536 (603000000340)
+   *[i] = 3 elem =  105759274697200 (6030000001f0)
+    [i] = 4 elem =  0 (0)
+    [i] = 5 elem =  0 (0)
+    [i] = 6 elem =  0 (0)
+    [i] = 7 elem =  0 (0)
+}
+data canary #2 = 6070deadb8e6
+Canary #2 = 7fff9213481e
+[-----------------END STACK_DUMP-----------------]
+
+
+[----------------BEGIN STACK_DUMP----------------]
+Stack_t[0x7fff4cbef210] "path1" born at src/akinator.cpp:467 function:[compare_objects()] called from src/my_stack.cpp:190 function:[stack_realloc()]
+Canary #1 = 7fff921348ae
+Stack capacity: 1
+Stack size    : 1
+
+CalcSt hash = 9b0b527e7ea2acb6
+Struct hash = 9b0b527e7ea2acb6
+
+Stack->data [0x6030000004f8]
+CalcBu hash = 1d5036993faf35ec
+Buffer hash = 1d5036993faf35ec
+
+data canary #1 = 6030deadbe46
+{
+   *[i] = 0 elem =  105759274697056 (603000000160)
+}
+data canary #2 = 6030deadbe46
+Canary #2 = 7fff921348ae
+[-----------------END STACK_DUMP-----------------]
+

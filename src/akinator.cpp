@@ -162,6 +162,7 @@ err_code_t give_definition(my_tree_t* tree, node_t* node_to_def)
     print_path(node_to_def, &path, 0, path.size);
 
     stack_dtor(&path);
+    printf("\n");
 
     return OK;
 }
@@ -179,7 +180,6 @@ err_code_t print_path(node_t* node_to_def, my_stack_t* stack, size_t from, size_
         printf(" %s", def_node->data);
         fflush(stdout);
     }
-    printf("\n");
 
     return OK;
 }
@@ -501,7 +501,7 @@ err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, 
 
         if (node_cmp_1 != node_cmp_2)
         {
-            same_elements = i;
+            same_elements = i - 1;
             break;
         }
             // {
@@ -519,13 +519,15 @@ err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, 
 
 
     }
-    print_path(node_1, path_1, 0, same_elements - 1);
+
+    if (same_elements != 1) print_path(node_1, path_1, 0, same_elements - 1);
+    else printf(" нет общих свойств");
 
     printf(", но %s", node_1->data);
-    print_path(node_1, path_1, same_elements - 1, path_1->size);
+    print_path(node_1, path_1, 0, path_1->size);
 
     printf(", а %s", node_2->data);
-    print_path(node_2, path_2, same_elements - 1, path_2->size);
+    print_path(node_2, path_2, same_elements, path_2->size);
 
     printf("\n");
 
