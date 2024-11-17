@@ -53,7 +53,7 @@ my_tree_t make_tree(char *buffer)
 }
 
 node_t* fill_node(char * buffer, size_t* position, my_tree_t* tree, node_t* parent)
-{// TODO some refactor
+{
     assert(buffer);
     assert(position);
     assert(tree);
@@ -177,7 +177,7 @@ err_code_t print_path(node_t* node_to_def, my_stack_t* stack, size_t from, size_
         node_t* def_node = NULL;
         stack_pop(stack, &def_node);
         insert_not(def_node, stack);
-        printf(" %s", def_node->data);
+        printf(" %s,", def_node->data);
         fflush(stdout);
     }
 
@@ -263,55 +263,43 @@ err_code_t show_menu(my_tree_t* tree, const char* curr_filename)
         scanf("%c", &answer);
         answer -= '0';
         free_input_buffer();
-        if (answer == MODE_GAME)
+        switch (answer)
         {
-            play_game(tree);
-        }
-        else if (answer == MODE_REWRITE)
-        {
-            overwrite_file(tree, curr_filename);
-        }
-        else if (answer == MODE_END)
-        {
-            printf("Thank you for game. See you later (^-^)\n");
-            break;
-        }
-        else if (answer == MODE_COMPARISON)
-        {
-            char* what_to_cmp_1 = NULL;
-            char* what_to_cmp_2 = NULL;
+            case MODE_END:                  printf("Thank you for game. See you later (^-^)\n"); break;
+            case MODE_GAME:                 play_game(tree);                                     break;
+            case MODE_REWRITE:              overwrite_file(tree, curr_filename);                 break;
+            case MODE_SHOW_ALL_DEFINITIONS: print_all_definitions(tree, tree->root);             break;
+            case MODE_SHOW_ALL_TEXT:        print_all_text(tree, tree->root);                    break;
+            case MODE_COMPARISON:
+            {
+                char* what_to_cmp_1 = NULL;
+                char* what_to_cmp_2 = NULL;
 
-            printf("Write name of object 1 to compare:\n");
-            get_line_from_stdin(&what_to_cmp_1);
+                printf("Write name of object 1 to compare:\n");
+                get_line_from_stdin(&what_to_cmp_1);
 
-            printf("Write name of object 2 to compare:\n");
-            get_line_from_stdin(&what_to_cmp_2);
+                printf("Write name of object 2 to compare:\n");
+                get_line_from_stdin(&what_to_cmp_2);
 
-            compare_objects(tree, find_node_by_text(tree, tree->root, what_to_cmp_1),
-                                  find_node_by_text(tree, tree->root, what_to_cmp_2));
+                compare_objects(tree, find_node_by_text(tree, tree->root, what_to_cmp_1),
+                                    find_node_by_text(tree, tree->root, what_to_cmp_2));
 
-            free(what_to_cmp_1);
-            free(what_to_cmp_2);
-        }
-        else if (answer == MODE_DEFINITION)
-        {
-            printf("Write name of object to give definition:\n");
-            char* what_to_def = NULL;
-            get_line_from_stdin(&what_to_def);
-            give_definition(tree, find_node_by_text(tree, tree->root, what_to_def));
-            free(what_to_def);
-        }
-        else if (answer == MODE_SHOW_ALL_TEXT)
-        {
-            print_all_text(tree, tree->root);
-        }
-        else if (answer == MODE_SHOW_ALL_DEFINITIONS)
-        {
-            print_all_definitions(tree, tree->root);
-        }
-        else
-        {
-            printf("wrong input '%c'\n", answer);
+                free(what_to_cmp_1);
+                free(what_to_cmp_2);
+                break;
+            }
+            case MODE_DEFINITION:
+            {
+                printf("Write name of object to give definition:\n");
+                char* what_to_def = NULL;
+                get_line_from_stdin(&what_to_def);
+                give_definition(tree, find_node_by_text(tree, tree->root, what_to_def));
+                free(what_to_def);
+                break;
+            }
+            default:
+                printf("wrong input '%c'\n", answer);
+                break;
         }
     }
 
@@ -501,7 +489,8 @@ err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, 
 
         if (node_cmp_1 != node_cmp_2)
         {
-            same_elements = i - 1;
+            // printf();
+            same_elements = path_1->size - i + 1;
             break;
         }
             // {
@@ -519,15 +508,15 @@ err_code_t print_comparison(node_t* node_1, node_t* node_2, my_stack_t* path_1, 
 
 
     }
-
+    // printf("same_elements = %zu", same_elements);
     if (same_elements != 1) print_path(node_1, path_1, 0, same_elements - 1);
     else printf(" нет общих свойств");
 
-    printf(", но %s", node_1->data);
+    printf(" но %s", node_1->data);
     print_path(node_1, path_1, 0, path_1->size);
 
-    printf(", а %s", node_2->data);
-    print_path(node_2, path_2, same_elements, path_2->size);
+    printf(" а %s", node_2->data);
+    print_path(node_2, path_2, 0, same_elements + 1);
 
     printf("\n");
 

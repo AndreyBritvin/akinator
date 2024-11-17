@@ -13,6 +13,7 @@ int main(const int argc, const char** argv)
         return ERROR_FILENAME_IS_EMPTY;
     }
     enable_logging("tree_dump/akinator.html");
+
     char *buffer = 0;
     fill_buffer(&buffer, argv[1]);
     // printf("%s\n", buffer);
